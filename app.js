@@ -1,10 +1,12 @@
 const express = require('express')
+const { users } = require('./model/index')
 const app = express()
 
 require ("./model/index")
 // yo chai frontend banauna ko lage rw tyo frontend  lai rander garnu ko lage yako lage ejs download garne
-app.set ('view engin','ejs')
-
+app.set ('view engine','ejs')
+app.use(express.urlencoded({extended : true})) //yale chai ke data aaudai xa taslai buj hai vaneko ho frontend bta
+app.use(express.json()) //baira bta aaune jsteri react/reactnative bta aauda
 
 app.get('/',(req,res)=>{
     res.render('home.ejs',)
@@ -17,6 +19,28 @@ app.get('/about',(req,res)=>{
 app.get("/register",(req,res)=>{
     res.render('auth/register.ejs')
 })
+app.post("/register",async(req,res)=>{
+    console.log(req.body)
+    // const username =req.body.username
+    // const password =req.body.password
+    // const email = req.body.email
+    const {username,password,email} =req.body
+    await users.create({
+        email,
+        password,
+        username
+    })
+    res.send("register sucesss fully")
+})
+
+// app.get ("/users",async (req,res)=>{
+//     const data =await users.findAll()
+//     res.json({
+//         data
+//     })
+// })
+
+
 app.get("/login",(req,res)=>{
     res.render("auth/login.ejs")
 })
@@ -35,3 +59,23 @@ app.listen(PORT,()=>{
 
 
 //sudo /Applications/XAMPP/xamppfiles/xampp start
+
+
+
+
+
+// rest api
+/*
+/getBlogs -get
+/singleblog/:id - get
+/deleteblog/:id - delete
+/updateblog/:id - update
+/addblog -post
+
+*/
+
+//restful api
+/*
+/blogs -get,post
+/blogs/:id -get,patch/put,delete
+*/

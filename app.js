@@ -1,6 +1,8 @@
 const express = require('express')
 const { users } = require('./model/index')
 const app = express()
+const bcrypt =require('bcrypt')
+const { where } = require('sequelize')
 
 require ("./model/index")
 // yo chai frontend banauna ko lage rw tyo frontend  lai rander garnu ko lage yako lage ejs download garne
@@ -25,9 +27,21 @@ app.post("/register",async(req,res)=>{
     // const password =req.body.password
     // const email = req.body.email
     const {username,password,email} =req.body
+    if(!username || !password || !email){
+        return res.send("plese provide username email password")
+    }
+    const data =await users.findAll({
+        where:{
+            email:email
+        }
+    }) 
+    if(data.length>0){
+        return res.send("allready login")
+    }
+
     await users.create({
         email,
-        password,
+        password: bcrypt.hashSync(password,10),
         username
     })
     res.send("register sucesss fully")
@@ -44,7 +58,17 @@ app.post("/register",async(req,res)=>{
 app.get("/login",(req,res)=>{
     res.render("auth/login.ejs")
 })
+// make api for login
+app.post("/login",(req,res)=>{
+     // const password =req.body.password
+    // const email = req.body.email
+    const {email,password} =req.body
+    if(!email || password){
+        return res.send("please provide email and password")
+    }
+    // const data =
 
+})
 
 app.use(express.static('public/css/'))
 

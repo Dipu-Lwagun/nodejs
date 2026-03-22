@@ -59,15 +59,31 @@ app.get("/login",(req,res)=>{
     res.render("auth/login.ejs")
 })
 // make api for login
-app.post("/login",(req,res)=>{
+app.post("/login",async(req,res)=>{
      // const password =req.body.password
     // const email = req.body.email
     const {email,password} =req.body
-    if(!email || password){
+    if(!email || !password){
         return res.send("please provide email and password")
     }
-    // const data =
+    // email check
+    const [data] = await users.findAll({
+        where:{
+            email: email
+        }
+    })
+    if(data){
+        // check password 
+        const isMatched= bcrypt.compareSync(password,data.password)
+        if(isMatched){
+            res.send("logged in sucess vayo la")
+        }else{
+            res.send("invalid passwored")
+        }
 
+    }else{
+        res.send('no user with this email')
+    }
 })
 
 app.use(express.static('public/css/'))

@@ -3,6 +3,7 @@ const { users } = require('./model/index')
 const app = express()
 const bcrypt =require('bcrypt')
 const { where } = require('sequelize')
+const jwt =require('jsonwebtoken')
 
 require ("./model/index")
 // yo chai frontend banauna ko lage rw tyo frontend  lai rander garnu ko lage yako lage ejs download garne
@@ -76,6 +77,11 @@ app.post("/login",async(req,res)=>{
         // check password 
         const isMatched= bcrypt.compareSync(password,data.password)
         if(isMatched){
+            const token =jwt.sign({id: data.id},'anthu',{
+                expiresIn:'30d'
+            } )
+            res.cookie("jwtToken",token)
+            
             res.send("logged in sucess vayo la")
         }else{
             res.send("invalid passwored")

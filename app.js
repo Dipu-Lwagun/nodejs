@@ -4,9 +4,11 @@ const app = express()
 const bcrypt =require('bcrypt')
 const { where } = require('sequelize')
 const jwt =require('jsonwebtoken')
-const { randerHomePage, randerRegisterpage, randerLoignpage, handleRegister } = require('./controller/authController')
+const { randerHomePage, randerRegisterpage, randerLoignpage, handleRegister, handleLogin } = require('./controller/authController')
 
 require ("./model/index")
+
+const authRoute= require('./routes/authRoute')
 // yo chai frontend banauna ko lage rw tyo frontend  lai rander garnu ko lage yako lage ejs download garne
 app.set ('view engine','ejs')
 app.use(express.urlencoded({extended : true})) //yale chai ke data aaudai xa taslai buj hai vaneko ho frontend bta
@@ -23,43 +25,11 @@ app.get('/about',(req,res)=>{
 })
 
 
-app.get("/register",randerRegisterpage)
 
-app.post("/register",handleRegister)
 
-app.get("/login",randerLoignpage)
-// make api for login
-app.post("/login",async(req,res)=>{
-     // const password =req.body.password
-    // const email = req.body.email
-    const {email,password} =req.body
-    if(!email || !password){
-        return res.send("please provide email and password")
-    }
-    // email check
-    const [data] = await users.findAll({
-        where:{
-            email: email
-        }
-    })
-    if(data){
-        // check password 
-        const isMatched= bcrypt.compareSync(password,data.password)
-        if(isMatched){
-            const token =jwt.sign({id: data.id},'anthu',{
-                expiresIn:'30d'
-            } )
-            res.cookie("jwtToken",token)
-            
-            res.send("logged in sucess vayo la")
-        }else{
-            res.send("invalid passwored")
-        }
+app.use("/",authRoute)
+//router bta gareko ho ya bta chai /authroute ma janxa ane tyo gayer harxa
 
-    }else{
-        res.send('no user with this email')
-    }
-})
 
 
 app.use(express.static('public/css/'))

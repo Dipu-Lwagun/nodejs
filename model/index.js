@@ -35,7 +35,19 @@ db.sequelize = sequelize;
 //importing model files
 // db.blogs = require("./blogModel.js")(sequelize, DataTypes);
 db.users = require("./userModule.js")(sequelize, DataTypes);
-db.blogs = require("./blogModel.js")(sequelize, DataTypes);
+db.questions = require('./questionModule.js')(sequelize,DataTypes);
+db.answers =require('./answerModule.js')(sequelize,DataTypes)
+
+db.users.hasMany(db.questions)
+db.questions.belongsTo(db.users)
+// yo chai aauta user dhari question sodnu sakxa trw tyo question chai tai aauta lay matraa sodeko hunxa
+
+db.questions.hasMany(db.answers)
+db.answers.belongsTo(db.questions)
+// yo chai question answer ko
+
+db.users.hasMany(db.answers)
+db.answers.belongsTo(db.users)
 
 
 db.sequelize.sync({ force:false}).then(()=>{

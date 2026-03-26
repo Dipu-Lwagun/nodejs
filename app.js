@@ -9,6 +9,7 @@ const { randerHomePage, randerRegisterpage, randerLoignpage, handleRegister, han
 require ("./model/index")
 
 const authRoute= require('./routes/authRoute')
+const questionRoute =require('./routes/questionRoute')
 // yo chai frontend banauna ko lage rw tyo frontend  lai rander garnu ko lage yako lage ejs download garne
 app.set ('view engine','ejs')
 app.use(express.urlencoded({extended : true})) //yale chai ke data aaudai xa taslai buj hai vaneko ho frontend bta
@@ -28,6 +29,7 @@ app.get('/about',(req,res)=>{
 
 
 app.use("/",authRoute)
+app.use("/",questionRoute)
 //router bta gareko ho ya bta chai /authroute ma janxa ane tyo gayer harxa
 
 
@@ -38,6 +40,7 @@ const PORT =3000
 app.listen(PORT,()=>{
     console.log(`project start vayo port ${PORT} ma hai`)
 })
+
 
 // app.listen(3000,()=>{
 //     console.log("prject run vayo yo port ma yo garda nee hunxa hai")
@@ -65,3 +68,4 @@ app.listen(PORT,()=>{
 /blogs -get,post
 /blogs/:id -get,patch/put,delete
 */
+

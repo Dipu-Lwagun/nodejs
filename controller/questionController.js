@@ -9,14 +9,18 @@ exports.askquestion =async (req, res)=>{
     const {title,description} = req.body
     console.log(req.body)
     console.log(req.file)
+
+    const userId =req.userId
     const fileName =req.file.filename
-    if(!title || description) {
+    if(!title || !description) {
         return res.send("plese provide title and description")
     }
     await questions.create({
         title,
         description,
-        image:fileName
+        image:fileName,
+        userId
+        
     })
     res.redirect("/")
 }
@@ -31,3 +35,7 @@ exports.getAllQuestion=async(req,res)=>{
         ]
     })
 }
+
+
+
+//multer npm package for image handel

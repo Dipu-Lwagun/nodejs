@@ -1,8 +1,12 @@
 const { renderAskQuestionPage, askquestion } = require("../controller/questionController")
 
-const route = require ("express").Router()
+const router = require ("express").Router()
 
-route.route("/askquestion").get(renderAskQuestionPage).post(askquestion)
+const {multer,storage}=require('../middleware/multerConfig')
+
+const upload =multer({storage:storage})
+
+router.route("/askquestion").get(renderAskQuestionPage).post(upload.single('image'),askquestion)
 
 
-module.exports =route
+module.exports =router

@@ -4,7 +4,10 @@ const app = express()
 const bcrypt =require('bcrypt')
 const { where } = require('sequelize')
 const jwt =require('jsonwebtoken')
+
+
 const { randerHomePage, randerRegisterpage, randerLoignpage, handleRegister, handleLogin } = require('./controller/authController')
+
 
 require ("./model/index")
 
